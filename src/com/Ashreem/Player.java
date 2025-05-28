@@ -50,6 +50,9 @@ public class Player implements KeyListener{
 	public void setCurrent() {
 		current=true;
 	}
+	public boolean getCurrent() {
+		return current;
+	}
 	public void removeCurrent() {
 		current=false;
 	}
@@ -76,6 +79,7 @@ public class Player implements KeyListener{
 					icon.setBounds(coordinate[0],coordinate[1],60,80);
 					parent.change();
 				}
+				
 			}
 			if(Team==2&&current) {
 				if(keyPressed==KeyEvent.VK_W) {
@@ -108,18 +112,12 @@ public class Player implements KeyListener{
 		keysPressed.remove(e.getKeyCode());
 	}
 	public void keyTyped(KeyEvent e) {
-//		if(e.getKeyCode()==KeyEvent.VK_UP) {
-//			coordinate[1]-=0.05;
-//			icon.setBounds(coordinate[0],coordinate[1],60,80);
-//			parent.change();
-//			System.out.println("Up arrow key typed");
-//			try {
-//			}
-//			catch(Exception ex) {
-//				ex.printStackTrace();
-//			}
-//		}
-//		System.out.println("Method called");
+		if(current&&Team==1&&e.getKeyChar()=='u'&&(coordinate[1]-parent.getFootball().getCoordinate()[1])<5) {
+			parent.getFootball().shoot(50);
+		}
+		if(current&&Team==2&&e.getKeyChar()=='r'&&(parent.getFootball().getCoordinate()[1]-coordinate[1])<60&&(parent.getFootball().getCoordinate()[1]-coordinate[1])>50) {
+			parent.getFootball().shoot(-50);
+		}
 	}
 
 }

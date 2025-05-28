@@ -1,7 +1,8 @@
 package com.Ashreem;
 
 import java.awt.Color;
-import java.awt.Image;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class Game {
 	JPanel myPanel=new JPanel();
 	ArrayList<Player> team1;
 	ArrayList<Player> team2;
+	Football football;
 	
 	public Game() {
 		JFrame frame=new JFrame("Soccer");
@@ -29,6 +31,7 @@ public class Game {
 		myPanel.setBackground(Color.GRAY);
 		myPanel.setFocusable(true);
         myPanel.requestFocusInWindow();
+        myPanel.addKeyListener(new Listener());
 		try {
 			team1=new ArrayList<Player>();
 			team2=new ArrayList<Player>();
@@ -58,8 +61,9 @@ public class Game {
 			team1.get(1).setCurrent();
 			team2.get(1).setCurrent();
 			
-			Football football=new Football();
+			football=new Football(this);
 			football.getFootball().setBounds(740,390,40,40);
+			football.setCoordinate(740, 390);
 			
 			myPanel.add(football.getFootball());
 			myPanel.setComponentZOrder(football.getFootball(), 8);
@@ -132,6 +136,11 @@ public class Game {
 		}
 	}
 	
+	public Football getFootball() {
+		return football;
+	}
+
+	
 	public void callRepeatedly() {
 		try {
 			Thread.sleep(50);
@@ -141,6 +150,7 @@ public class Game {
 			for(Player p:team2) {
 				p.update();
 			}
+			football.update();
 		}
 		catch(Exception ex) {
 			ex.printStackTrace();
@@ -148,5 +158,39 @@ public class Game {
 	}
 	public void change() {
 		myPanel.repaint();
+	}
+	
+	public class Listener implements KeyListener{
+
+		public void keyTyped(KeyEvent e) {
+			if(e.getKeyChar()=='q') {
+				for(int i=0;i<team2.size();i++) {
+					if(team2.get(i).getCurrent()==true) {
+						team2.get(i).removeCurrent();
+						team2.get((i+1)%team2.size()).setCurrent();
+						break;
+					}
+				}
+			}
+			if(e.getKeyChar()=='/') {
+				for(int i=0;i<team1.size();i++) {
+					if(team1.get(i).getCurrent()==true) {
+						team1.get(i).removeCurrent();
+						team1.get((i+1)%team1.size()).setCurrent();
+						break;
+					}
+				}
+			}
+		}
+		
+
+		public void keyPressed(KeyEvent e) {
+			
+		}
+
+		public void keyReleased(KeyEvent e) {
+			
+		}
+		
 	}
 }
